@@ -1,5 +1,78 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+
+
+## config
+
+1 按需加载
+
+webpack.config.js中 在module模块 ,loader: require.resolve('babel-loader')对象中的plugins数组中添加
+
+
+ {
+              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              include: paths.appSrc,
+              loader: require.resolve('babel-loader'),
+              options: {
+                customize: require.resolve(
+                  'babel-preset-react-app/webpack-overrides'
+                ),
+                
+                plugins: [
+                  [
+                    require.resolve('babel-plugin-named-asset-import'),
+                    {
+                      loaderMap: {
+                        svg: {
+                          ReactComponent: '@svgr/webpack?-svgo![path]',
+                        },
+                      },
+                    },
+                  ],
+                  [
+                    "import",
+                    {libraryName: "antd", style: true} // 移动端添加 "libraryName": "antd-mobile"
+                  ] 
+                ],
+                // This is a feature of `babel-loader` for webpack (not Babel itself).
+                // It enables caching results in ./node_modules/.cache/babel-loader/
+                // directory for faster rebuilds.
+                cacheDirectory: true,
+                cacheCompression: isEnvProduction,
+                compact: isEnvProduction,
+              },
+    },
+
+
+
+
+可以参考 https://www.jianshu.com/p/9ca927b748f7
+
+2 支持less
+
+const lssRegex = /\.(less|less)$/;
+const lssModuleRegex = /\.module\.(less|less)$/;
+
+webpack.config.js中 的 module模块添加
+
+````
+
+ {
+              test: lssRegex,
+              exclude: lssModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 2,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
+                },
+                'less-loader'
+
+),
+````
+
 ## Available Scripts
 
 In the project directory, you can run:
