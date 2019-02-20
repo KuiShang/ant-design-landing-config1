@@ -73,6 +73,10 @@ webpack.config.js中 的 module模块添加
 ),
 ````
 
+如果报错 .bezierEasingMixin();
+
+解决方案：将less版本降到3.0以下 比如安装 2.7.3版本。
+
 ## Available Scripts
 
 In the project directory, you can run:
